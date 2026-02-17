@@ -1,0 +1,32 @@
+{
+  "order_id": "9deb8f08",
+  "timestamp": "2026-02-17 21:20:02",
+  "customer": {
+    "user_id": "fcb65e51",
+    "name": "",
+    "phone": "",
+    "email": ""
+  },
+  "payment_method": "cash",
+  "cart": {
+    "2": 1,
+    "3": 1
+  },
+  "total": 3398,
+  "cart_items": [
+    {
+      "id": 2,
+      "title": "Белая кружка",
+      "price": 799,
+      "qty": 1,
+      "subtotal": 799
+    },
+    {
+      "id": 3,
+      "title": "Худи MW STORE",
+      "price": 2599,
+      "qty": 1,
+      "subtotal": 2599
+    }
+  ]
+}

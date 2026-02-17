@@ -1,0 +1,24 @@
+{
+  "order_id": "18d416f5",
+  "timestamp": "2026-02-17 22:11:45",
+  "customer": {
+    "user_id": "fcb65e51",
+    "name": "ncmhgxnm",
+    "phone": "91203491230419",
+    "email": "kristinacernaeva75364@gmail.com"
+  },
+  "payment_method": "cash",
+  "cart": {
+    "3": 1
+  },
+  "total": 2599,
+  "cart_items": [
+    {
+      "id": 3,
+      "title": "Худи MW STORE",
+      "price": 2599,
+      "qty": 1,
+      "subtotal": 2599
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="cart-page animate__animated animate__fadeInUp">
+    <h2><i class="fas fa-shopping-bag"></i> Корзина</h2>
+
+    {% if cart %}
+    <div class="cart-items-list">
+        {% for item in cart %}
+        <div class="cart-item-card" data-product-id="{{ item.id }}">
+            <div class="cart-item-icon">
+                {% if item.id == 1 %}
+                    <i class="fas fa-tshirt"></i>
+                {% elif item.id == 2 %}
+                    <i class="fas fa-mug-hot"></i>
+                {% elif item.id == 3 %}
+                    <i class="fas fa-hoodie"></i>
+                {% else %}
+                    <i class="fas fa-tag"></i>
+                {% endif %}
+            </div>
+            <div class="cart-item-details">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.price }}₽ за шт.</p>
+            </div>
+            <div class="cart-item-controls">
+                <div class="qty-control">
+                    <button class="qty-btn minus" onclick="updateQuantity({{ item.id }}, -1)">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="qty-value cart-page-qty">{{ item.qty }}</span>
+                    <button class="qty-btn plus" onclick="updateQuantity({{ item.id }}, 1)">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <button class="remove-item" onclick="removeFromCart({{ item.id }})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+            <div class="cart-item-subtotal">
+                {{ item.subtotal }}₽
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="cart-total-section">
+        <span>Итого:</span>
+        <span>{{ total }}₽</span>
+    </div>
+
+    <div class="cart-actions">
+        <a href="{{ url_for('clear_cart') }}" class="btn-clear">
+            <i class="fas fa-trash"></i> Очистить всё
+        </a>
+        <a href="{{ url_for('checkout') }}" class="btn-checkout">
+            <i class="fas fa-arrow-right"></i> Оформить заказ
+        </a>
+    </div>
+    {% else %}
+    <div class="empty-cart">
+        <i class="fas fa-shopping-bag"></i>
+        <p>Ваша корзина пуста</p>
+        <a href="{{ url_for('products_page') }}" class="btn-shop">
+            <i class="fas fa-store"></i> Перейти в каталог
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function updateQuantity(productId, change) {
+    fetch(`/update_cart/${productId}`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ change: change })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "ok") {
+                location.reload();
+            }
+        })
+        .catch(err => console.error("Ошибка:", err));
+}
+
+function removeFromCart(productId) {
+    fetch(`/remove_from_cart/${productId}`, {
+        method: "POST",
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "ok") {
+                location.reload();
+            }
+        })
+        .catch(err => console.error("Ошибка:", err));
+}
+</script>
+{% endblock %}
