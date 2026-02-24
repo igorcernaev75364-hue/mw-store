@@ -1,3 +1,9 @@
+print("=== Starting Flask app ===")
+print(f"Current directory: {os.getcwd()}")
+print(f"Files in directory: {os.listdir('.')}")
+print(f"Templates folder exists: {os.path.exists('templates')}")
+if os.path.exists('templates'):
+    print(f"Templates: {os.listdir('templates')}")
 from flask import Flask, render_template, session, request, jsonify, redirect, url_for
 from flask_session import Session
 import os
@@ -333,4 +339,5 @@ def product_detail(pid):
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
+
     app.run(host='0.0.0.0', port=port, debug=False)
