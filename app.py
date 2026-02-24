@@ -239,7 +239,30 @@ def product_detail(pid):
     if not product:
         return redirect(url_for("products_page"))
     return render_template("product.html", product=product)
+@app.route("/api/cart")
+def cart_api():
+    cart_data = session.get("cart", {})
+    cart_products = []
+    total = 0
+    
+    for pid, qty in cart_data.items():
+        product = next((p for p in products if p["id"] == int(pid)), None)
+        if product:
+            cart_products.append({
+                "id": pid,
+                "title": product["title"],
+                "price": product["price"],
+                "qty": qty,
+                "subtotal": qty * product["price"]
+            })
+            total += qty * product["price"]
+    
+    return jsonify({
+        "cart": cart_products,
+        "total": total
+    })
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
