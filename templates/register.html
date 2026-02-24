@@ -12,14 +12,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="register-body">
-    <!-- Фоновые градиенты -->
     <div class="gradient-bg">
         <div class="gradient-orb orb1"></div>
         <div class="gradient-orb orb2"></div>
         <div class="gradient-orb orb3"></div>
     </div>
 
-    <!-- Центральная панель регистрации (только одна!) -->
     <div class="register-container animate__animated animate__fadeIn">
         <div class="register-card glass-card">
             <div class="register-header">
@@ -28,13 +26,20 @@
                 <p>Войдите или зарегистрируйтесь</p>
             </div>
 
-            <form id="registerForm" class="register-form">
+            {% if error %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" class="register-form">
                 <div class="form-group">
                     <label for="phone">
                         <i class="fas fa-phone"></i>
                         <span>Номер телефона</span>
                     </label>
-                    <input type="tel" id="phone" class="glass-input"
+                    <input type="tel" id="phone" name="phone" class="glass-input" 
                            placeholder="+7 (999) 999-99-99">
                 </div>
 
@@ -47,7 +52,7 @@
                         <i class="fas fa-envelope"></i>
                         <span>Email</span>
                     </label>
-                    <input type="email" id="email" class="glass-input"
+                    <input type="email" id="email" name="email" class="glass-input" 
                            placeholder="ivan@example.com">
                 </div>
 
@@ -56,7 +61,7 @@
                     <span>Введите хотя бы одно поле для входа</span>
                 </div>
 
-                <button type="submit" class="register-submit glass-button" id="submitBtn">
+                <button type="submit" class="register-submit glass-button">
                     <span>Продолжить</span>
                     <i class="fas fa-arrow-right"></i>
                 </button>
@@ -68,61 +73,5 @@
             </div>
         </div>
     </div>
-
-    <div id="notice" class="glass-notice"></div>
-
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const submitBtn = document.getElementById('submitBtn');
-
-            if (!phone && !email) {
-                showNotice('❌ Введите телефон или email', 'error');
-                return;
-            }
-
-            submitBtn.classList.add('btn-loading');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-
-            try {
-                const response = await fetch('/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ phone, email })
-                });
-
-                const data = await response.json();
-
-                if (data.status === 'success') {
-                    showNotice('✅ ' + data.message, 'success');
-                    setTimeout(() => {
-                        window.location.href = '/products';
-                    }, 1500);
-                } else {
-                    showNotice('❌ ' + data.message, 'error');
-                }
-            } catch (error) {
-                showNotice('❌ Ошибка соединения', 'error');
-            } finally {
-                submitBtn.classList.remove('btn-loading');
-                submitBtn.innerHTML = '<span>Продолжить</span><i class="fas fa-arrow-right"></i>';
-            }
-        });
-
-        function showNotice(message, type = 'success') {
-            const notice = document.getElementById('notice');
-            notice.innerHTML = message;
-            notice.classList.add('show');
-
-            setTimeout(() => {
-                notice.classList.remove('show');
-            }, 3000);
-        }
-    </script>
 </body>
 </html>
