@@ -9,11 +9,10 @@
     </div>
 
     <div class="product-detail-card glass-card animate__animated animate__fadeInUp">
-        <!-- Изображение товара -->
         <div class="product-gallery">
             <div class="product-main-image">
                 {% if product.main_image %}
-                <img src="{{ url_for('static', filename='images/products/' + product.main_image) }}"
+                <img src="{{ url_for('static', filename='images/products/' + product.main_image) }}" 
                      alt="{{ product.title }}">
                 {% else %}
                 <div class="product-icon-large">
@@ -27,25 +26,24 @@
                 </div>
                 {% endif %}
             </div>
-
+            
             {% if product.model_image %}
             <div class="product-thumbnails">
                 <div class="thumbnail active">
-                    <img src="{{ url_for('static', filename='images/products/' + product.main_image) }}"
+                    <img src="{{ url_for('static', filename='images/products/' + product.main_image) }}" 
                          alt="Основное фото">
                 </div>
                 <div class="thumbnail">
-                    <img src="{{ url_for('static', filename='images/products/' + product.model_image) }}"
+                    <img src="{{ url_for('static', filename='images/products/' + product.model_image) }}" 
                          alt="Фотосессия">
                 </div>
             </div>
             {% endif %}
         </div>
 
-        <!-- Информация о товаре -->
         <div class="product-detail-info">
             <h1 class="product-detail-title">{{ product.title }}</h1>
-
+            
             <div class="product-detail-price">
                 <span class="current-price">{{ product.price }}₽</span>
             </div>
@@ -64,7 +62,6 @@
                 </ul>
             </div>
 
-            <!-- Кнопки действий -->
             <div class="product-detail-actions">
                 <form action="{{ url_for('add_to_cart', pid=product.id) }}" method="POST" style="flex: 2;">
                     <button type="submit" class="btn-add-large glass-button">
@@ -78,7 +75,6 @@
                 </a>
             </div>
 
-            <!-- Дополнительная информация -->
             <div class="product-meta">
                 <div class="meta-item">
                     <i class="fas fa-truck"></i>
