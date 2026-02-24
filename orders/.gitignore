@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.vscode/
+.idea/
+*.db
+orders/
+users.json
+.DS_Store
+flask_session/
