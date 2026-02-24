@@ -6,7 +6,7 @@
         <h1>Заказ оформлен!</h1>
         <p>Номер вашего заказа: <strong>#{{ order_id }}</strong></p>
         <p class="success-message">Спасибо за покупку! Мы уже начали собирать ваш заказ.</p>
-
+        
         <div class="success-actions">
             <a href="{{ url_for('products_page') }}" class="btn-shop glass-button">
                 <i class="fas fa-store"></i> Продолжить покупки
@@ -72,11 +72,11 @@
     .success-card {
         padding: 30px 20px;
     }
-
+    
     .success-icon {
         font-size: 60px;
     }
-
+    
     .success-card h1 {
         font-size: 2rem;
     }
