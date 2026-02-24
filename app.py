@@ -19,8 +19,6 @@ Session(app)
 
 # Создаем папки для хранения данных
 ORDERS_DIR = "orders"
-USERS_FILE = "users.json"
-
 if not os.path.exists(ORDERS_DIR):
     os.makedirs(ORDERS_DIR)
 
@@ -66,16 +64,6 @@ products = [
     },
 ]
 
-def load_users():
-    if os.path.exists(USERS_FILE):
-        with open(USERS_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    return {}
-
-def save_users(users):
-    with open(USERS_FILE, 'w', encoding='utf-8') as f:
-        json.dump(users, f, ensure_ascii=False, indent=2)
-
 def calculate_total(cart):
     total = 0
     for pid, qty in cart.items():
@@ -94,8 +82,7 @@ def save_order_to_txt(order_data, filename):
         f.write("👤 ПОКУПАТЕЛЬ:\n")
         f.write(f"  Имя: {order_data['customer']['name']}\n")
         f.write(f"  Телефон: {order_data['customer']['phone']}\n")
-        f.write(f"  Email: {order_data['customer']['email']}\n")
-        f.write(f"  ID пользователя: {order_data['customer']['user_id']}\n\n")
+        f.write(f"  Email: {order_data['customer']['email']}\n\n")
         
         f.write("💳 ОПЛАТА:\n")
         payment_names = {
@@ -114,72 +101,16 @@ def save_order_to_txt(order_data, filename):
         f.write(f"ИТОГО: {order_data['total']}₽\n")
         f.write("=" * 50 + "\n")
 
-def login_required(f):
-    def decorated_function(*args, **kwargs):
-        if "user_id" not in session:
-            return redirect(url_for("register"))
-        return f(*args, **kwargs)
-    decorated_function.__name__ = f.__name__
-    return decorated_function
-
 # ===== МАРШРУТЫ =====
 @app.route("/")
 def index():
-    if "user_id" not in session:
-        return redirect(url_for("register"))
     return render_template("index.html")
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "POST":
-        phone = request.form.get("phone")
-        email = request.form.get("email")
-        
-        if not phone and not email:
-            return render_template("register.html", error="Введите телефон или email")
-        
-        users = load_users()
-        
-        # Проверяем, существует ли пользователь
-        user_id = None
-        for uid, user in users.items():
-            if (phone and user.get("phone") == phone) or (email and user.get("email") == email):
-                user_id = uid
-                break
-        
-        if not user_id:
-            # Создаем нового пользователя
-            user_id = str(uuid.uuid4())[:8]
-            users[user_id] = {
-                "phone": phone,
-                "email": email,
-                "registered_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            }
-            save_users(users)
-        
-        # Сохраняем в сессию
-        session["user_id"] = user_id
-        session["user_phone"] = phone
-        session["user_email"] = email
-        
-        return redirect(url_for("products_page"))
-    
-    return render_template("register.html")
-
-@app.route("/logout")
-def logout():
-    session.pop("user_id", None)
-    session.pop("user_phone", None)
-    session.pop("user_email", None)
-    return redirect(url_for("register"))
-
 @app.route("/products")
-@login_required
 def products_page():
     return render_template("products.html", products=products)
 
 @app.route("/cart")
-@login_required
 def cart():
     cart_data = session.get("cart", {})
     cart_products = []
@@ -201,7 +132,6 @@ def cart():
     return render_template("cart.html", cart=cart_products, total=total)
 
 @app.route("/add_to_cart/<int:pid>", methods=["POST"])
-@login_required
 def add_to_cart(pid):
     cart = session.get("cart", {})
     cart[pid] = cart.get(pid, 0) + 1
@@ -209,7 +139,6 @@ def add_to_cart(pid):
     return redirect(request.referrer or url_for("products_page"))
 
 @app.route("/update_cart/<int:pid>", methods=["POST"])
-@login_required
 def update_cart(pid):
     action = request.form.get("action")
     cart = session.get("cart", {})
@@ -228,17 +157,18 @@ def update_cart(pid):
     return redirect(url_for("cart"))
 
 @app.route("/clear_cart", methods=["POST"])
-@login_required
 def clear_cart():
     session["cart"] = {}
     return redirect(url_for("cart"))
 
 @app.route("/checkout")
-@login_required
 def checkout():
     cart_data = session.get("cart", {})
     cart_products = []
     total = 0
+    
+    if not cart_data:
+        return redirect(url_for("cart"))
     
     for pid, qty in cart_data.items():
         product = next((p for p in products if p["id"] == int(pid)), None)
@@ -256,14 +186,12 @@ def checkout():
     return render_template("checkout.html", cart=cart_products, total=total)
 
 @app.route("/place_order", methods=["POST"])
-@login_required
 def place_order():
     try:
         order_data = {
             "order_id": str(uuid.uuid4())[:8],
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "customer": {
-                "user_id": session.get("user_id", "guest"),
                 "name": request.form.get("name"),
                 "phone": request.form.get("phone"),
                 "email": request.form.get("email")
@@ -306,7 +234,6 @@ def place_order():
         return render_template("checkout.html", error=str(e))
 
 @app.route("/product/<int:pid>")
-@login_required
 def product_detail(pid):
     product = next((p for p in products if p["id"] == pid), None)
     if not product:
