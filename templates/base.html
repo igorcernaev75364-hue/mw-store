@@ -53,17 +53,6 @@
                     <i class="fas fa-store"></i>
                     <span>Каталог</span>
                 </a>
-                {% if session.user_id %}
-                <div class="user-menu">
-                    <span class="user-phone glass-card">
-                        <i class="fas fa-user"></i>
-                        {{ session.user_phone or session.user_email }}
-                    </span>
-                    <a href="{{ url_for('logout') }}" class="nav-link logout-link">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </a>
-                </div>
-                {% endif %}
             </div>
         </nav>
     </header>
@@ -116,7 +105,7 @@
             cart.classList.toggle('expanded');
         }
         
-        // Обновление счетчика корзины (простой polling)
+        // Обновление счетчика корзины
         function updateCartCount() {
             fetch('/api/cart')
                 .then(res => res.json())
@@ -133,5 +122,3 @@
     </script>
 </body>
 </html>
-
-
