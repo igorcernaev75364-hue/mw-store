@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>M W STORE</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
@@ -16,6 +16,31 @@
         <div class="gradient-orb orb1"></div>
         <div class="gradient-orb orb2"></div>
         <div class="gradient-orb orb3"></div>
+        
+        <!-- Декоративные элементы -->
+        <div class="decor-elements">
+            <div class="rocket rocket-1">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <div class="rocket rocket-2">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <div class="star star-1">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="star star-2">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="star star-3">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="star star-4">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="comet">
+                <i class="fas fa-meteor"></i>
+            </div>
+        </div>
     </div>
 
     <header>
@@ -48,6 +73,7 @@
         {% block content %}{% endblock %}
     </main>
 
+    <!-- Плавающая корзина -->
     <div id="floating-cart" class="floating-cart">
         <div class="cart-preview glass-card">
             <div class="cart-header" onclick="toggleCart()">
@@ -65,6 +91,45 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+    <!-- Футер с информацией о разработчиках -->
+    <footer class="site-footer">
+        <div class="footer-content glass-card">
+            <p class="footer-text">
+                <i class="fas fa-code"></i>
+                Сайт разработали студенты: 
+                <span class="developers">
+                    <a href="#" class="developer-link">Кристина</a>,
+                    <a href="#" class="developer-link">Анна</a>,
+                    <a href="#" class="developer-link">Алексей</a>
+                </span>
+            </p>
+            <p class="footer-year">
+                <i class="far fa-copyright"></i> 2026 M W STORE - Учебный проект
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Простой JavaScript только для мобильной корзины
+        function toggleCart() {
+            const cart = document.querySelector('.cart-preview');
+            cart.classList.toggle('expanded');
+        }
+        
+        // Обновление счетчика корзины (простой polling)
+        function updateCartCount() {
+            fetch('/api/cart')
+                .then(res => res.json())
+                .then(data => {
+                    const count = data.cart.reduce((sum, item) => sum + item.qty, 0);
+                    document.querySelector('.cart-count').textContent = count;
+                    document.querySelector('.cart-total').textContent = data.total + '₽';
+                });
+        }
+        
+        // Обновляем каждые 5 секунд
+        setInterval(updateCartCount, 5000);
+        updateCartCount();
+    </script>
 </body>
 </html>
