@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="checkout-page">
+    <div class="checkout-header animate__animated animate__fadeInDown">
+        <h1><i class="fas fa-truck"></i> Оформление заказа</h1>
+        <p class="header-subtitle">Заполните данные для доставки</p>
+    </div>
+
+    {% if error %}
+    <div class="error-message glass-card">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+
+    <div class="checkout-grid">
+        <!-- Левая колонка - форма -->
+        <div class="checkout-form glass-card animate__animated animate__fadeInLeft">
+            <form action="{{ url_for('place_order') }}" method="POST" id="orderForm">
+                <h2><i class="fas fa-address-card"></i> Контактные данные</h2>
+
+                <div class="form-group">
+                    <label for="name">
+                        <i class="fas fa-user"></i>
+                        <span>Ваше имя *</span>
+                    </label>
+                    <input type="text" id="name" name="name" placeholder="Иван Иванов" class="glass-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">
+                        <i class="fas fa-phone"></i>
+                        <span>Телефон *</span>
+                    </label>
+                    <input type="tel" id="phone" name="phone" placeholder="+7 (999) 999-99-99" class="glass-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email *</span>
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="ivan@example.com" class="glass-input" required>
+                </div>
+
+                <h2 style="margin-top: 40px;"><i class="fas fa-credit-card"></i> Способ оплаты</h2>
+
+                <div class="payment-methods">
+                    <label class="payment-option glass-card">
+                        <input type="radio" name="payment" value="card" checked>
+                        <div class="payment-content">
+                            <i class="fas fa-credit-card"></i>
+                            <div class="payment-info">
+                                <span class="payment-title">Банковская карта</span>
+                                <span class="payment-desc">Visa, Mastercard, МИР</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="payment-option glass-card">
+                        <input type="radio" name="payment" value="sbp">
+                        <div class="payment-content">
+                            <i class="fas fa-mobile-alt"></i>
+                            <div class="payment-info">
+                                <span class="payment-title">СБП</span>
+                                <span class="payment-desc">Система быстрых платежей</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="payment-option glass-card">
+                        <input type="radio" name="payment" value="cash">
+                        <div class="payment-content">
+                            <i class="fas fa-coins"></i>
+                            <div class="payment-info">
+                                <span class="payment-title">Наличными</span>
+                                <span class="payment-desc">При получении</span>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </form>
+        </div>
+
+        <!-- Правая колонка - карта и заказ -->
+        <div class="checkout-right">
+            <!-- Карта с адресом -->
+            <div class="map-section glass-card animate__animated animate__fadeInRight">
+                <h2><i class="fas fa-map-marker-alt"></i> Адрес доставки</h2>
+                <div class="map-container">
+                    <div class="custom-map">
+                        <div class="map-marker">
+                            <div class="marker-pulse"></div>
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="building-info glass-card">
+                            <i class="fas fa-laptop-code"></i>
+                            <div class="building-details">
+                                <span class="building-name">IT Бирюлево</span>
+                                <span class="building-address">ул. Академика Миллионщикова, 35</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="map-hint">
+                    <i class="fas fa-info-circle"></i>
+                    Доставка осуществляется только по этому адресу
+                </p>
+            </div>
+
+            <!-- Ваш заказ -->
+            <div class="order-summary glass-card animate__animated animate__fadeInRight" style="animation-delay: 0.2s;">
+                <h2><i class="fas fa-shopping-bag"></i> Ваш заказ</h2>
+
+                <div class="order-items">
+                    {% for item in cart %}
+                    <div class="order-item">
+                        <div class="order-item-icon">
+                            {% if item.id == 1 %}
+                                <i class="fas fa-tshirt"></i>
+                            {% elif item.id == 2 %}
+                                <i class="fas fa-mug-hot"></i>
+                            {% elif item.id == 3 %}
+                                <i class="fas fa-hoodie"></i>
+                            {% endif %}
+                        </div>
+                        <div class="order-item-info">
+                            <div class="order-item-title">{{ item.title }}</div>
+                            <div class="order-item-price">{{ item.price }}₽ × {{ item.qty }}</div>
+                        </div>
+                        <div class="order-item-subtotal">{{ item.subtotal }}₽</div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="order-total">
+                    <div class="total-line">
+                        <span>Подытог:</span>
+                        <span>{{ total }}₽</span>
+                    </div>
+                    <div class="total-line">
+                        <span>Доставка:</span>
+                        <span class="delivery-free">Бесплатно</span>
+                    </div>
+                    <div class="total-line grand-total">
+                        <span>Итого к оплате:</span>
+                        <span>{{ total }}₽</span>
+                    </div>
+                </div>
+
+                <button type="submit" form="orderForm" class="btn-checkout-submit glass-button">
+                    <i class="fas fa-check"></i>
+                    Подтвердить заказ
+                </button>
+
+                <p class="agreement-text">
+                    Нажимая кнопку, вы соглашаетесь с
+                    <a href="#">условиями доставки</a> и
+                    <a href="#">политикой обработки данных</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-message {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    color: #ff3b30;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.error-message i {
+    font-size: 24px;
+}
+
+@media (max-width: 768px) {
+    .error-message {
+        margin: 15px;
+        padding: 15px;
+    }
+}
+</style>
+{% endblock %}

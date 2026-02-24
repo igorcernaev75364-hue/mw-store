@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>M W STORE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="gradient-bg">
+        <div class="gradient-orb orb1"></div>
+        <div class="gradient-orb orb2"></div>
+        <div class="gradient-orb orb3"></div>
+    </div>
+
+    <header>
+        <nav class="glass-nav">
+            <a class="logo-text" href="{{ url_for('index') }}">
+                <i class="fas fa-crown"></i> M W STORE
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('products_page') }}" class="nav-link">
+                    <i class="fas fa-store"></i>
+                    <span>Каталог</span>
+                </a>
+                {% if session.user_id %}
+                <div class="user-menu">
+                    <span class="user-phone glass-card">
+                        <i class="fas fa-user"></i>
+                        {{ session.user_phone or session.user_email }}
+                    </span>
+                    <a href="{{ url_for('logout') }}" class="nav-link logout-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div id="notice" class="glass-notice"></div>
+        {% block content %}{% endblock %}
+    </main>
+
+    <div id="floating-cart" class="floating-cart">
+        <div class="cart-preview glass-card">
+            <div class="cart-header" onclick="toggleCart()">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-count">0</span>
+                <span class="cart-total">0₽</span>
+                <i class="fas fa-chevron-up arrow-icon"></i>
+            </div>
+            <div class="cart-items"></div>
+            <div class="cart-footer">
+                <a href="{{ url_for('cart') }}" class="btn-cart-full glass-button">
+                    <i class="fas fa-shopping-cart"></i> Открыть корзину
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+</body>
+</html>

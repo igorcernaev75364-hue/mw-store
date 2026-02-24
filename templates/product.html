@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="product-page">
+    <div class="back-button-container animate__animated animate__fadeIn">
+        <a href="{{ url_for('products_page') }}" class="back-button glass-card">
+            <i class="fas fa-arrow-left"></i>
+            <span>Назад</span>
+        </a>
+    </div>
+
+    <div class="product-detail-card glass-card animate__animated animate__fadeInUp">
+        <!-- Изображение товара -->
+        <div class="product-gallery">
+            <div class="product-main-image">
+                {% if product.main_image %}
+                <img src="{{ url_for('static', filename='images/products/' + product.main_image) }}"
+                     alt="{{ product.title }}">
+                {% else %}
+                <div class="product-icon-large">
+                    {% if product.id == 1 %}
+                        <i class="fas fa-tshirt"></i>
+                    {% elif product.id == 2 %}
+                        <i class="fas fa-mug-hot"></i>
+                    {% elif product.id == 3 %}
+                        <i class="fas fa-hoodie"></i>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            {% if product.model_image %}
+            <div class="product-thumbnails">
+                <div class="thumbnail active">
+                    <img src="{{ url_for('static', filename='images/products/' + product.main_image) }}"
+                         alt="Основное фото">
+                </div>
+                <div class="thumbnail">
+                    <img src="{{ url_for('static', filename='images/products/' + product.model_image) }}"
+                         alt="Фотосессия">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Информация о товаре -->
+        <div class="product-detail-info">
+            <h1 class="product-detail-title">{{ product.title }}</h1>
+
+            <div class="product-detail-price">
+                <span class="current-price">{{ product.price }}₽</span>
+            </div>
+
+            <div class="product-detail-description">
+                <h3><i class="fas fa-info-circle"></i> Описание</h3>
+                <p>{{ product.description }}</p>
+            </div>
+
+            <div class="product-detail-features">
+                <h3><i class="fas fa-star"></i> Характеристики</h3>
+                <ul class="features-list">
+                    {% for feature in product.features %}
+                    <li><i class="fas fa-check"></i> {{ feature }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Кнопки действий -->
+            <div class="product-detail-actions">
+                <form action="{{ url_for('add_to_cart', pid=product.id) }}" method="POST" style="flex: 2;">
+                    <button type="submit" class="btn-add-large glass-button">
+                        <i class="fas fa-cart-plus"></i>
+                        Добавить в корзину
+                    </button>
+                </form>
+                <a href="{{ url_for('checkout') }}" class="btn-buy-now glass-button">
+                    <i class="fas fa-bolt"></i>
+                    Купить сейчас
+                </a>
+            </div>
+
+            <!-- Дополнительная информация -->
+            <div class="product-meta">
+                <div class="meta-item">
+                    <i class="fas fa-truck"></i>
+                    <span>Бесплатная доставка</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-undo-alt"></i>
+                    <span>Возврат 14 дней</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Гарантия качества</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

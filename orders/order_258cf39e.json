@@ -1,0 +1,24 @@
+{
+  "order_id": "258cf39e",
+  "timestamp": "2026-02-17 21:24:07",
+  "customer": {
+    "user_id": "fcb65e51",
+    "name": "",
+    "phone": "",
+    "email": ""
+  },
+  "payment_method": "card",
+  "cart": {
+    "2": 1
+  },
+  "total": 799,
+  "cart_items": [
+    {
+      "id": 2,
+      "title": "Белая кружка",
+      "price": 799,
+      "qty": 1,
+      "subtotal": 799
+    }
+  ]
+}

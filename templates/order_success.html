@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="order-success-page animate__animated animate__fadeInUp">
+    <div class="success-card glass-card">
+        <i class="fas fa-check-circle success-icon"></i>
+        <h1>Заказ оформлен!</h1>
+        <p>Номер вашего заказа: <strong>#{{ order_id }}</strong></p>
+        <p class="success-message">Спасибо за покупку! Мы уже начали собирать ваш заказ.</p>
+
+        <div class="success-actions">
+            <a href="{{ url_for('products_page') }}" class="btn-shop glass-button">
+                <i class="fas fa-store"></i> Продолжить покупки
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.order-success-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    padding: 20px;
+}
+
+.success-card {
+    max-width: 500px;
+    padding: 50px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.success-icon {
+    font-size: 80px;
+    color: #4cd964;
+    margin-bottom: 30px;
+    animation: scaleIn 0.5s ease;
+}
+
+.success-card h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.success-card p {
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.success-message {
+    margin: 30px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 30px;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .success-card {
+        padding: 30px 20px;
+    }
+
+    .success-icon {
+        font-size: 60px;
+    }
+
+    .success-card h1 {
+        font-size: 2rem;
+    }
+}
+</style>
+{% endblock %}
