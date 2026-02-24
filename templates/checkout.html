@@ -14,11 +14,10 @@
     {% endif %}
 
     <div class="checkout-grid">
-        <!-- Левая колонка - форма -->
         <div class="checkout-form glass-card animate__animated animate__fadeInLeft">
             <form action="{{ url_for('place_order') }}" method="POST" id="orderForm">
                 <h2><i class="fas fa-address-card"></i> Контактные данные</h2>
-
+                
                 <div class="form-group">
                     <label for="name">
                         <i class="fas fa-user"></i>
@@ -44,7 +43,7 @@
                 </div>
 
                 <h2 style="margin-top: 40px;"><i class="fas fa-credit-card"></i> Способ оплаты</h2>
-
+                
                 <div class="payment-methods">
                     <label class="payment-option glass-card">
                         <input type="radio" name="payment" value="card" checked>
@@ -82,9 +81,7 @@
             </form>
         </div>
 
-        <!-- Правая колонка - карта и заказ -->
         <div class="checkout-right">
-            <!-- Карта с адресом -->
             <div class="map-section glass-card animate__animated animate__fadeInRight">
                 <h2><i class="fas fa-map-marker-alt"></i> Адрес доставки</h2>
                 <div class="map-container">
@@ -108,10 +105,9 @@
                 </p>
             </div>
 
-            <!-- Ваш заказ -->
             <div class="order-summary glass-card animate__animated animate__fadeInRight" style="animation-delay: 0.2s;">
                 <h2><i class="fas fa-shopping-bag"></i> Ваш заказ</h2>
-
+                
                 <div class="order-items">
                     {% for item in cart %}
                     <div class="order-item">
@@ -154,37 +150,12 @@
                 </button>
 
                 <p class="agreement-text">
-                    Нажимая кнопку, вы соглашаетесь с
-                    <a href="#">условиями доставки</a> и
+                    Нажимая кнопку, вы соглашаетесь с 
+                    <a href="#">условиями доставки</a> и 
                     <a href="#">политикой обработки данных</a>
                 </p>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-.error-message {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background: rgba(255, 59, 48, 0.1);
-    border: 1px solid rgba(255, 59, 48, 0.3);
-    color: #ff3b30;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.error-message i {
-    font-size: 24px;
-}
-
-@media (max-width: 768px) {
-    .error-message {
-        margin: 15px;
-        padding: 15px;
-    }
-}
-</style>
 {% endblock %}
